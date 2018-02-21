@@ -1,5 +1,5 @@
 const { handleAllBooksRequest } = require('../handlers/handleAllBooksRequest');
-const insertBooksinDB = require('../handlers/insertBooksInDB');
+const insertDB = require('../handlers/insertBooksInDB');
 const updateOpinion = require('../handlers/updateOpinion');
 const handlebookswithlikes = require('../handlers/handleBooksWithLikes');
 
@@ -28,7 +28,7 @@ module.exports = [
     method: 'POST',
     path: '/mylibrary',
     handler: (request, response) => {
-      insertBooksinDB()
+      insertDB.insertBooksinDB()
         .then((booksEntered) => {
           if (booksEntered) {
             response({
@@ -78,6 +78,28 @@ module.exports = [
           statusCode: 200,
         });
       })
+        .catch(() => {
+          response({
+            data: {
+              reason: 'Unable to retrieve books.',
+            },
+            statusCode: 500,
+          });
+        });
+    },
+  },
+  {
+    method: 'POST',
+    path: '/mylibrary/bookswithlikes',
+    handler: (request, response) => {
+      insertDB.insertBooksinDBWithoutCheck()
+        .then(message => handlebookswithlikes())
+        .then((allBooksData) => {
+          response({
+            data: allBooksData,
+            statusCode: 200,
+          });
+        })
         .catch(() => {
           response({
             data: {

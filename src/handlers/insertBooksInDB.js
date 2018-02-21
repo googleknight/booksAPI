@@ -31,5 +31,10 @@ function insertBooksinDB() {
       .then(allPromises => Promise.all(allPromises))
       .then(allBooks => writeinDB(allBooks)));
 }
-
-module.exports = insertBooksinDB;
+function insertBooksinDBWithoutCheck() {
+  return rp.get(booksurl)
+    .then(allBooksData => mergeRating(allBooksData))
+    .then(allPromises => Promise.all(allPromises))
+    .then(allBooks => writeinDB(allBooks));
+}
+module.exports = { insertBooksinDB, insertBooksinDBWithoutCheck };
