@@ -81,3 +81,23 @@ describe('/mylibrary/unlike should return', () => {
       });
   });
 });
+
+
+describe('/mylibrary/bookswithlikes should return', () => {
+  it('200 response code on succesful GET request', (done) => {
+    supertest(server.listener)
+      .get('/mylibrary/bookswithlikes')
+      .then((response) => {
+        expect(response.body.statusCode).toBe(200);
+        done();
+      });
+  });
+  it('success message on PUT request of unlike', (done) => {
+    supertest(server.listener)
+      .get('/mylibrary/bookswithlikes')
+      .then((response) => {
+        expect(response.body.data).toEqual(expect.arrayContaining(CONSTANT.APIFOUROUTPUT));
+        done();
+      });
+  });
+});

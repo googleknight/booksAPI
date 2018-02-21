@@ -1,6 +1,7 @@
-const handleAllBooksRequest = require('../handlers/handleAllBooksRequest');
+const { handleAllBooksRequest } = require('../handlers/handleAllBooksRequest');
 const insertBooksinDB = require('../handlers/insertBooksInDB');
 const updateOpinion = require('../handlers/updateOpinion');
+const handlebookswithlikes = require('../handlers/handleBooksWithLikes');
 
 module.exports = [
   {
@@ -62,6 +63,26 @@ module.exports = [
         .catch(() => {
           response({
             message: `Unable to ${request.params.opinion} Book ${request.payload.id}`,
+            statusCode: 500,
+          });
+        });
+    },
+  },
+  {
+    method: 'GET',
+    path: '/mylibrary/bookswithlikes',
+    handler: (request, response) => {
+      handlebookswithlikes().then((allBooksData) => {
+        response({
+          data: allBooksData,
+          statusCode: 200,
+        });
+      })
+        .catch(() => {
+          response({
+            data: {
+              reason: 'Unable to retrieve books.',
+            },
             statusCode: 500,
           });
         });
