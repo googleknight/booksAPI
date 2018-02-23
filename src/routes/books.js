@@ -73,6 +73,14 @@ module.exports = [
     path: '/mylibrary/bookswithlikes',
     handler: (request, response) => {
       handlebookswithlikes().then((allBooksData) => {
+        if (Object.keys(allBooksData).length === 0) {
+          response({
+            data: {
+              reason: 'Unable to retrieve books.',
+            },
+            statusCode: 500,
+          });
+        }
         response({
           data: allBooksData,
           statusCode: 200,
