@@ -53,19 +53,27 @@ module.exports = [
     method: 'PUT',
     path: '/mylibrary/{opinion}',
     handler: (request, response) => {
-      updateOpinion(request.payload.id, request.params.opinion)
-        .then(() => {
-          response({
-            message: `Book ${request.payload.id} ${request.params.opinion}d`,
-            statusCode: 200,
-          });
-        })
-        .catch(() => {
-          response({
-            message: `Unable to ${request.params.opinion} Book ${request.payload.id}`,
-            statusCode: 500,
-          });
+      const bookid = request.payload.id;
+      if (typeof bookid === 'undefined') {
+        response({
+          message: 'undefined id, send correct id',
+          statusCode: 500,
         });
+      } else {
+        updateOpinion(bookid, request.params.opinion)
+          .then(() => {
+            response({
+              message: `Book ${bookid} ${request.params.opinion}d`,
+              statusCode: 200,
+            });
+          })
+          .catch(() => {
+            response({
+              message: `Unable to ${request.params.opinion} Book ${bookid}`,
+              statusCode: 500,
+            });
+          });
+      }
     },
   },
   {
